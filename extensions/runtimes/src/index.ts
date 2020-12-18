@@ -16,6 +16,7 @@ const removeDirAndFiles = promisify(rimraf);
 export default async (composer: any): Promise<void> => {
   const dotnetTemplatePath = path.resolve(__dirname, '../../../runtime/dotnet');
   const nodeTemplatePath = path.resolve(__dirname, '../../../runtime/node');
+
   // register the bundled c# runtime used by the local publisher with the eject feature
   composer.addRuntimeTemplate({
     key: 'csharp-azurewebapp',
@@ -64,6 +65,9 @@ export default async (composer: any): Promise<void> => {
     },
     identifyManifest: (runtimePath: string): string => {
       return path.join(runtimePath, 'azurewebapp', 'Microsoft.BotFramework.Composer.WebApp.csproj');
+    },
+    getProjectFolder: (runtimeFolder: string, mode = 'azurewebapp') =>{
+      return path.resolve(runtimeFolder, mode);
     },
     run: async (project: any, localDisk: IFileStorage) => {
       composer.log('RUN THIS C# PROJECT!');
@@ -211,6 +215,9 @@ export default async (composer: any): Promise<void> => {
         throw new Error(install2Err);
       }
       composer.log('BUILD COMPLETE');
+    },
+    getProjectFolder: (runtimeFolder: string, mode = 'azurewebapp') =>{
+      return runtimeFolder;
     },
     installComponent: async (runtimePath: string, packageName: string, version: string): Promise<string> => {
       // run dotnet install on the project

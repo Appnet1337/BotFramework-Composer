@@ -113,13 +113,19 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
     };
 
     // path to the runtime code inside the working folder
-    private getProjectFolder = (key: string, template: string) => {
-      return path.resolve(this.baseRuntimeFolder, `${key}/${template}`);
+    private getProjectFolder = (runtime: any, key:string, template: string) => {
+      console.log(runtime.getProjectFolder);
+      if(runtime && runtime.getProjectFolder){
+        return runtime.getProjectFolder(this.getRuntimeFolder(key), template);
+      }
     };
 
     // path to the declarative assets
-    private getBotFolder = (key: string, template: string) =>
-      path.resolve(this.getProjectFolder(key, template), 'ComposerDialogs');
+    private getBotFolder = (runtime: any, key: string, template: string) => {
+      const projFolder = this.getProjectFolder(runtime, key, template);
+      console.log(projFolder);
+      return path.resolve(projFolder, 'ComposerDialogs');
+    }
 
     /*******************************************************************************************************************************/
     /* These methods deal with the publishing history displayed in the Composer UI */
@@ -176,7 +182,8 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
       try {
         // point to the declarative assets (possibly in remote storage)
         const botFiles = project.getProject().files;
-        const botFolder = this.getBotFolder(resourcekey, this.mode);
+        const botFolder = this.getBotFolder(runtime, resourcekey, this.mode);
+        console.log(botFolder);
         const runtimeFolder = this.getRuntimeFolder(resourcekey);
 
         // clean up from any previous deploys
@@ -218,13 +225,13 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
      * @param resourcekey
      */
     private async cleanup(resourcekey: string) {
-      try{
-        const projFolder = this.getRuntimeFolder(resourcekey);
-        await emptyDir(projFolder);
-        await rmdir(projFolder);
-      } catch (error) {
-        this.logger('$O', error);
-      }
+      // try{
+      //   const projFolder = this.getRuntimeFolder(resourcekey);
+      //   await emptyDir(projFolder);
+      //   await rmdir(projFolder);
+      // } catch (error) {
+      //   this.logger('$O', error);
+      // }
     }
 
 
@@ -260,7 +267,7 @@ export default async (composer: IExtensionRegistration): Promise<void> => {
           }
         },
         accessToken: accessToken,
-        projPath: this.getProjectFolder(resourcekey, this.mode),
+        projPath: this.getProjectFolder(runtime, resourcekey, this.mode),
         runtime: runtime,
       });
 

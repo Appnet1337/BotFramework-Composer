@@ -35,12 +35,12 @@ export const getServerPort = () => {
 };
 
 /**
- * Get path of bot project.
+ * Get path of bot assets.
  */
 export const getProjectRoot = (): string => {
   // get the root folder according to environment
   if (process.env.runtime_environment === 'production') {
-    return path.join(__dirname, '../../azurewebapp/ComposerDialogs');
+    return path.join(__dirname, '../../ComposerDialogs');
   } else {
     return path.join(__dirname, '../../../');
   }

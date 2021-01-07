@@ -79,23 +79,29 @@ export function useShell(source: EventSource, projectId: string): Shell {
   const dialogMapRef = useRef({});
 
   const schemas = useRecoilValue(schemasState(projectId));
+
   const dialogs = useRecoilValue(validateDialogsSelectorFamily(projectId));
   const focusPath = useRecoilValue(focusPathState(projectId));
   const skills = useRecoilValue(skillsStateSelector);
   const locale = useRecoilValue(localeState(projectId));
   const qnaFiles = useRecoilValue(qnaFilesState(projectId));
+
   const undoFunction = useRecoilValue(undoFunctionState(projectId));
+
   const designPageLocation = useRecoilValue(designPageLocationState(projectId));
   const { undo, redo, commitChanges } = undoFunction;
   const luFiles = useRecoilValue(luFilesState(projectId));
   const lgFiles = useRecoilValue(lgFilesState(projectId));
   const dialogSchemas = useRecoilValue(dialogSchemasState(projectId));
   const botName = useRecoilValue(botDisplayNameState(projectId));
+
   const settings = useRecoilValue(settingsState(projectId));
   const flowZoomRate = useRecoilValue(rateInfoState);
+
   const rootBotProjectId = useRecoilValue(rootBotProjectIdSelector);
   const isRootBot = rootBotProjectId === projectId;
-  const projectCollection = useRecoilValue<BotInProject[]>(botProjectSpaceSelector).map((bot) => ({
+  const test = useRecoilValue<BotInProject[]>(botProjectSpaceSelector);
+  const projectCollection = test.map((bot) => ({
     ...bot,
     hasWarnings: false,
   }));

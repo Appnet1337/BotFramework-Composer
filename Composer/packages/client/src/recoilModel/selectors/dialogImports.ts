@@ -36,32 +36,36 @@ export const getLanguageFileImports = <T extends { id: string; content: string }
   getFile: (fileId: string) => T
 ): LanguageFileImport[] => {
   const imports: LanguageFileImport[] = [];
+  // console.time('******');
+  // const visitedIds: string[] = [];
+  // const fileIds = [rootDialogId];
 
-  const visitedIds: string[] = [];
-  const fileIds = [rootDialogId];
+  // while (fileIds.length) {
+  //   const currentId = fileIds.pop() as string;
 
-  while (fileIds.length) {
-    const currentId = fileIds.pop() as string;
+  //   // If this file is already visited, then continue.
+  //   if (visitedIds.includes(currentId)) {
+  //     continue;
+  //   }
+  //   console.time('test');
+  //   const file = getFile(currentId);
 
-    // If this file is already visited, then continue.
-    if (visitedIds.includes(currentId)) {
-      continue;
-    }
+  //   // If file is not found or file content is empty, then continue.
+  //   if (!file || !file.content) {
+  //     // eslint-disable-next-line no-console
+  //     console.warn(`Could not find language import file ${currentId}`);
+  //     continue;
+  //   }
 
-    const file = getFile(currentId);
-    // If file is not found or file content is empty, then continue.
-    if (!file || !file.content) {
-      // eslint-disable-next-line no-console
-      console.warn(`Could not find language import file ${currentId}`);
-      continue;
-    }
-    const currentImports = getImportsHelper(file.content);
-    visitedIds.push(currentId);
-    imports.push(...currentImports);
-    const newIds = currentImports.map((ci) => getBaseName(ci.id));
-    fileIds.push(...newIds);
-  }
+  //   console.timeEnd('test');
+  //   const currentImports = getImportsHelper(file.content);
 
+  //   visitedIds.push(currentId);
+  //   imports.push(...currentImports);
+  //   const newIds = currentImports.map((ci) => getBaseName(ci.id));
+  //   fileIds.push(...newIds);
+  // }
+  // console.timeEnd('******');
   return uniqBy(imports, 'id');
 };
 
@@ -70,9 +74,9 @@ export const lgImportsSelectorFamily = selectorFamily<LanguageFileImport[], { pr
   key: 'lgImports',
   get: ({ projectId, dialogId }) => ({ get }) => {
     const locale = get(localeState(projectId));
-
+    const lgFiles = get(lgFilesState(projectId));
     const getFile = (fileId: string) =>
-      get(lgFilesState(projectId)).find((f) => f.id === fileId || f.id === `${fileId}.${locale}`) as LgFile;
+      lgFiles.find((f) => f.id === fileId || f.id === `${fileId}.${locale}`) as LgFile;
 
     // Have to exclude common as a special case
     return getLanguageFileImports(dialogId, getFile).filter((i) => i.id !== 'common');
@@ -84,9 +88,9 @@ export const luImportsSelectorFamily = selectorFamily<LanguageFileImport[], { pr
   key: 'luImports',
   get: ({ projectId, dialogId }) => ({ get }) => {
     const locale = get(localeState(projectId));
-
+    const luFiles = get(luFilesState(projectId));
     const getFile = (fileId: string) =>
-      get(luFilesState(projectId)).find((f) => f.id === fileId || f.id === `${fileId}.${locale}`) as LuFile;
+      luFiles.find((f) => f.id === fileId || f.id === `${fileId}.${locale}`) as LuFile;
 
     return getLanguageFileImports(dialogId, getFile);
   },

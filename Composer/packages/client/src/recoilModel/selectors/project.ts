@@ -111,6 +111,7 @@ export const botProjectSpaceSelector = selector({
   key: 'botProjectSpaceSelector',
   get: ({ get }) => {
     const botProjects = get(botProjectIdsState);
+
     const result = botProjects.map((projectId: string) => {
       const { isRemote, isRootBot } = get(projectMetaDataState(projectId));
       const dialogs = get(validateDialogsSelectorFamily(projectId));

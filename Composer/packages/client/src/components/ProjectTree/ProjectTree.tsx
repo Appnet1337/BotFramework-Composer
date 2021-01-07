@@ -125,7 +125,8 @@ function getTriggerName(trigger: ITrigger): string {
 }
 
 function sortDialog(dialogs: DialogInfo[]) {
-  const dialogsCopy = cloneDeep(dialogs);
+  const cloned = JSON.parse(JSON.stringify(dialogs));
+  const dialogsCopy = cloned;
   return dialogsCopy.sort((x, y) => {
     if (x.isRoot) {
       return -1;

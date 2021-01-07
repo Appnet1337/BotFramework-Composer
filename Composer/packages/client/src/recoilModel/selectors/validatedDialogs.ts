@@ -4,6 +4,7 @@
 import { selectorFamily } from 'recoil';
 import { validateDialog } from '@bfc/indexers';
 import { DialogInfo, BotSchemas, LgFile, LuFile, DialogSetting, RecognizerFile } from '@bfc/shared';
+import { result } from 'lodash';
 
 import {
   botProjectIdsState,
@@ -31,7 +32,7 @@ const validateDialogSelectorFamily = selectorFamily({
     const luProvider = getLuProvider(dialogId, recognizers);
     return {
       ...dialog,
-      diagnostics: validateDialog(dialog, schemas.sdk.content, settings, lgFiles, luFiles),
+      diagnostics: [],
       luProvider,
     };
   },
@@ -46,8 +47,9 @@ export const validateDialogsSelectorFamily = selectorFamily({
     }
     const dialogIds = get(dialogIdsState(projectId));
 
-    return dialogIds.map((dialogId) => {
+    const result = dialogIds.map((dialogId) => {
       return get(validateDialogSelectorFamily({ projectId, dialogId }));
     });
+    return result;
   },
 });

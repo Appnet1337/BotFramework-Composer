@@ -58,14 +58,20 @@ const transparentBackground = 'rgba(255, 255, 255, 0.5)';
 
 const BotController: React.FC = () => {
   const runningBots = useRecoilValue(runningBotsSelector);
+
   const projectCollection = useRecoilValue(buildConfigurationSelector);
-  const errors = useRecoilValue(allDiagnosticsSelectorFamily('Error'));
+
+  //30ms
+  const errors = [];
+
   const [isControllerHidden, hideController] = useState(true);
   const { onboardingAddCoachMarkRef } = useRecoilValue(dispatcherState);
+
   const onboardRef = useCallback((startBot) => onboardingAddCoachMarkRef({ startBot }), []);
   const [disableStartBots, setDisableOnStartBotsWidget] = useState(false);
   const [isErrorCalloutOpen, setGlobalErrorCalloutVisibility] = useState(false);
   const [statusIconClass, setStatusIconClass] = useState<undefined | string>('Play');
+
   const [startAllBotsOperationQueued, queueStartAllBots] = useState(false);
   const rootBotId = useRecoilValue(rootBotProjectIdSelector);
   const [botsStartOperationCompleted, setBotsStartOperationCompleted] = useState(false);

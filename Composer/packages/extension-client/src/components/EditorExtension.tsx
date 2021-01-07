@@ -17,6 +17,5 @@ export const EditorExtension: React.FC<EditorExtensionProps> = ({ shell, plugins
   const context = useMemo(() => {
     return { shellApi: shell.api, shellData: shell.data, plugins, projectId };
   }, [shell.api, shell.data, plugins]);
-
   return <EditorExtensionContext.Provider value={context}>{children}</EditorExtensionContext.Provider>;
 };

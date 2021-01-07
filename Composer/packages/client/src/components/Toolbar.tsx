@@ -106,11 +106,13 @@ export const Toolbar = (props: ToolbarProps) => {
   const projectId = useRecoilValue(currentProjectIdState);
   const schemas = useRecoilValue(schemasState(projectId));
   const shellForPropertyEditor = useShell('DesignPage', projectId);
-
   const pluginConfig: PluginConfig = useMemo(() => {
     const sdkUISchema = schemas?.ui?.content ?? {};
     const userUISchema = schemas?.uiOverrides?.content ?? {};
-    return mergePluginConfigs({ uiSchema: sdkUISchema }, plugins, { uiSchema: userUISchema });
+
+    const result = mergePluginConfigs({ uiSchema: sdkUISchema }, plugins, { uiSchema: userUISchema });
+
+    return result;
   }, [schemas?.ui?.content, schemas?.uiOverrides?.content]);
 
   const left: IToolbarItem[] = [];

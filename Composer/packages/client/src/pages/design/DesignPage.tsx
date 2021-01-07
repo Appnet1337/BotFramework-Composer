@@ -730,7 +730,7 @@ const DesignPage: React.FC<RouteComponentProps<{ dialogId: string; projectId: st
                 css={{ width: 120, height: '100%', position: 'absolute', left: 0, visibility: 'hidden' }}
                 data-testid="CoachmarkRef-AddNew"
               />
-              <Toolbar toolbarItems={toolbarItems} />
+              {/* <Toolbar toolbarItems={toolbarItems} /> */}
             </div>
             <Conversation css={editorContainer}>
               <div css={editorWrapper}>

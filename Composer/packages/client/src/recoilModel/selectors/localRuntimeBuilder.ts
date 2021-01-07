@@ -56,7 +56,7 @@ export const buildEssentialsSelector = selectorFamily({
     const dialogs = get(validateDialogsSelectorFamily(projectId));
     const luFiles = get(luFilesState(projectId));
     const qnaFiles = get(qnaFilesState(projectId));
-    const buildRequired = get(botBuildRequiredSelector(projectId));
+    const buildRequired = !isAbsHosted() && needsBuild(dialogs);
     const status = get(botStatusState(projectId));
 
     return {
